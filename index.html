@@ -1,33 +1,3 @@
-<?php
-
-include("database_connection.php");
-include("stats_db-connect.php");
-session_start();
-include_once("error.php");
-maintenance();
-
-//Used for login redirect
-
-$_SESSION['current_page'] = $_SERVER['REQUEST_URI'];
-
-//
-
-$query = "SELECT * FROM GraphData as date ORDER BY Date";
-$result = mysqli_query($connect1, $query);
-$Members = '';
-$Servers = '';
-$Patterns = '';
-$TotalResponces = '';
-while($row = mysqli_fetch_array($result))
-{
-    $Members = $row['Members'];
-    $Servers = $row['Servers'];
-    $Patterns = $row['Patterns'];
-    $TotalResponces = $row['TotalResponses'];
-}
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,65 +37,7 @@ while($row = mysqli_fetch_array($result))
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="https://jarvischatbot.xyz/updates">Changelogs</a>
-            </li>
-            <?php                  
-                if(isset($_SESSION['user_id']))
-                {
-                    $id = $_SESSION['discord_id'];
-                    $avatar = $_SESSION['avatar'];
-                    
-                    if($avatar == NULL)
-                    {
-                        $image = "https://discordapp.com/assets/322c936a8c8be1b803cd94861bdfa868.png"; 
-                    }
-                    else
-                    {
-                        $image = "https://cdn.discordapp.com/avatars/$id/$avatar.png?size=64";  
-                    }
-
-                    echo '
-                    <li style="align:right" class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img alt="Discord Profile Picture" style="width:30px;height:30px;border-radius:50%;" src="'.$image.'"> '.$_SESSION['username'].'
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="https://jarvischatbot.xyz/settings.php">Server Settings</a>
-                            ';
-
-                            if($_SESSION['verified'] == "[Moderator] ")
-                            {
-                                echo '<a class="dropdown-item" href="https://jarvischatbot.xyz/admin">Admin Panel</a>';
-                                echo '<a class="dropdown-item" href="https://jarvischatbot.xyz/council.php">Council Panel</a>';
-                            }
-                            else if($_SESSION['verified'] == "[Administrator] ")
-                            {
-                                echo '<a class="dropdown-item" href="https://jarvischatbot.xyz/admin">Admin Panel</a>';
-                                echo '<a class="dropdown-item" href="https://jarvischatbot.xyz/council.php">Council Panel</a>';
-                            }
-                            else if($_SESSION['verified'] == "[Developer] ")
-                            {
-                                echo '<a class="dropdown-item" href="https://jarvischatbot.xyz/admin">Admin Panel</a>';
-                                echo '<a class="dropdown-item" href="https://jarvischatbot.xyz/council.php">Council Panel</a>';
-                            }
-                            else if($_SESSION['rank'] == "council")
-                            {
-                                echo '<a class="dropdown-item" href="https://jarvischatbot.xyz/council.php">Council Panel</a>';
-                            }
-
-                            echo '<a class="dropdown-item" href="https://jarvischatbot.xyz/user.php">User Panel</a>';
-                            
-                            echo '
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="https://jarvischatbot.xyz/logout.php">Logout</a>
-                        </div>
-                    </li>
-                    ';
-                }
-                else
-                {
-                    echo '<button onclick="window.location.href=`https://jarvischatbot.xyz/login.php?action=login`" class="btn btn-outline-secondary my-2 my-sm-0 btn-round btn-sm">LOGIN</button>';
-                }
-            ?>
+            </li>     
         </ul>
     </div>
 </nav>
@@ -164,35 +76,6 @@ while($row = mysqli_fetch_array($result))
 			<p class="card-text"><b>Every single conversation</b> with Jarvis is used to improve his responses, he gets smarter every day!</p>
 		</div>
 	</div>
-</div>
-<div class="statistics">
-    <div class="cards">
-		<div class="subtitle">Don't take our word for it though, check out these impressive stats:</div>
-        <div class="card statistic" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">Active Users</h5>
-                <h1 style="font-weight: bold !important"><?php echo number_format($Members)."<br>"; ?></h1>
-            </div>
-        </div>
-        <div class="card statistic" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">Servers</h5>
-                <h1 style="font-weight: bold !important"><?php echo number_format($Servers)."<br>"; ?></h1>
-            </div>
-        </div>
-        <div class="card statistic" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">Patterns Created</h5>
-                <h1 style="font-weight: bold !important"><?php echo number_format($Patterns)."<br>"; ?></h1>
-            </div>
-        </div>
-        <div class="card statistic" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">Todays Replies</h5>
-                <h1 style="font-weight: bold !important"><?php echo number_format($TotalResponces)."<br>"; ?></h1>
-            </div>
-        </div>
-    </div>
 </div>
 <div class="start">
     <div class="card">
